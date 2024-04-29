@@ -28,7 +28,7 @@ async function run() {
 
     const addListCollection = client.db("TouristSpotListDB").collection("TouristSpotList")
 
-    app.post('/add_list', async (req, res) => { 
+    app.post('/addList', async (req, res) => {
       const addList = req.body;
       console.log(addList);
       const result = await addListCollection.insertOne(addList);
@@ -40,7 +40,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
