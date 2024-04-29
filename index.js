@@ -26,9 +26,13 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const addListCollection = client.db("TouristSpotListDB").collection("TouristSpotList")
+
     app.post('/add_list', async (req, res) => { 
       const addList = req.body;
       console.log(addList);
+      const result = await addListCollection.insertOne(addList);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
