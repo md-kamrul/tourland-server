@@ -28,16 +28,39 @@ async function run() {
 
     const addListCollection = client.db("TouristSpotListDB").collection("TouristSpotList")
 
-    app.get('/addList', async (req, res) => { 
+    app.get('/addList', async (req, res) => {
       const cursor = addListCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
 
-    app.get('/addList/:id', async (req, res) => { 
+    app.get('/addList/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await addListCollection.findOne(query);
+      res.send(result);
+    })
+
+    app.put('/addList/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) }
+      const options = { upsert: true }
+      const updateInfo = req.body;
+      const info = {
+        $set: {
+          email: updateInfo.email,
+          image: updateInfo.image,
+          shortDescription: updateInfo.shortDescription,
+          touristSpot: updateInfo.touristSpot,
+          country: updateInfo.country,
+          location: updateInfo.location,
+          averageCost: updateInfo.averageCost,
+          seasonality: updateInfo.seasonality,
+          travelTime: updateInfo.travelTime,
+          totalVisitorPerYear: updateInfo.totalVisitorPerYear
+        }
+      }
+      const result = await addListCollection.updateOne(filter, info, options);
       res.send(result);
     })
 
@@ -48,7 +71,7 @@ async function run() {
       res.send(result);
     })
 
-    app.delete('/addList/:id', async (req, res) => { 
+    app.delete('/addList/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await addListCollection.deleteOne(query);
